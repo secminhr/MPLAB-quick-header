@@ -2,5 +2,5 @@
 MPLAB quick header for final 
 
 - [ ] digital programmed-IO
-- [ ] interrupt
+- [ ] internal interrupt INT0~2
 - [ ] ADC
