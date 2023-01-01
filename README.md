@@ -5,3 +5,5 @@ MPLAB quick header for final
 - [ ] internal interrupt INT0~2
 - [ ] ADC
 - [ ] Timer
+- [ ] CCP
+- [ ] UART
