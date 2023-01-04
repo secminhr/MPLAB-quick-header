@@ -13,7 +13,7 @@ typedef enum {
     HIGH_PRIORITY
 } INT_PRIORITY;
 
-void configINT(int inter, INT_EDGE edge, INT_PRIORITY pri) {
+void enableINT(int inter, INT_EDGE edge, INT_PRIORITY pri) {
 	if (inter == 0) {
         setIOMode(B, 0, IN);
         INTCON2bits.INTEDG0 = edge;
@@ -31,6 +31,26 @@ void configINT(int inter, INT_EDGE edge, INT_PRIORITY pri) {
         INTCON3bits.INT2IF = 0;
         INTCON3bits.INT2IE = 1;
         INTCON3bits.INT2IP = pri;
+    }
+}
+
+void disableINT(int inter) {
+    if (inter == 0) {
+        INTCONbits.INT0E = 0;
+    } else if (inter == 1) {
+        INTCON3bits.INT1E = 0;
+    } else {
+        INTCON3bits.INT2E = 0;
+    }
+}
+
+void interruptHandled(int inter) {
+    if (inter == 0) {
+        INTCONbits.INT0IF = 0;
+    } else if (inter == 1) {
+        INTCON3bits.INT1IF = 0;
+    } else {
+        INTCON3bits.INT2IF = 0;
     }
 }
 
