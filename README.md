@@ -22,6 +22,7 @@ if (read(A, 4)) {
 Note: `setIOMode` must be used before Analog input setting (ADCON1). `setIOMode` will implicitly do `ADCON1 = 0x0F`.
 
 - [ ] internal interrupt INT0~2
+Need test
 - [ ] ADC
 - [ ] Timer
 - [ ] CCP
