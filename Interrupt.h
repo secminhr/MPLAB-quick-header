@@ -13,7 +13,9 @@ typedef enum {
     HIGH_PRIORITY
 } INT_PRIORITY;
 
-void enableINT(int inter, INT_EDGE edge, INT_PRIORITY pri) {
+char has_peripheral_interrupt = 0;
+
+void configINT(int inter, INT_EDGE edge, INT_PRIORITY pri) {
 	if (inter == 0) {
         setIOMode(B, 0, IN);
         INTCON2bits.INTEDG0 = edge;
@@ -58,6 +60,9 @@ void interruptHandled(int inter) {
 #define WITHOUT_PRIORITY 0
 
 void startInterrupts(int usePriority) {
+    if (has_peripheral_interrupt) {
+        INTCONbits.PEIE = 1;
+    }
     if (usePriority) {
         RCONbits.IPEN = 1;
         INTCONbits.GIEH = 1;
