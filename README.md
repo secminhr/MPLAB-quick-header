@@ -28,6 +28,6 @@ Need test
 - [ ] Timer
 Need test
 - [ ] CCP
-Need test
+PWM tested
 - [ ] UART
 Need test

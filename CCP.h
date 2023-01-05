@@ -67,21 +67,39 @@ void configCompareCCP(int ccp, unsigned short match_value, CompareEvent event, I
     }
 }
 
-void configPWMCCP(int ccp, unsigned long long period, int duty_cycle_percentage) {
-    double val = 1.0 * PR2 * duty_cycle_percentage / 100;
+int configPWMCCP(int ccp, unsigned long long period_us, double duty_cycle_percentage) {
+    configTimer2(T2PRE16, 1, 0, HIGH_PRIORITY);
+    //configTimer2(T2PRE4, 1, 0, HIGH_PRIORITY);
+    if (setTimeout2(period_us) != 1) {
+        return 0;
+    }
+    
+    double val = PR2 * duty_cycle_percentage / 100;
     if (ccp == 1) {
         setIOMode(C, 2, OUT);
+        write(C, 2, LOW);
         CCPR1L = (unsigned char) val;
         CCP1CONbits.DC1B = (unsigned) (4 * (val - CCPR1L));
-        CCP1CONbits.CCP1M = 0xC0;
+        CCP1CONbits.CCP1M = 0xC;
     } else {
         setIOMode(C, 3, OUT);
+        write(C, 3, LOW);
         CCPR2L = (unsigned char) val;
         CCP2CONbits.DC2B = (unsigned) (4 * (val - CCPR2L));
-        CCP2CONbits.CCP2M = 0xC0;
+        CCP2CONbits.CCP2M = 0xC;
     }
-    configTimer2(16, POST1, 0, HIGH_PRIORITY);
-    setTimeout2(period);
+    return 1;
+}
+
+void changePWMDutyCyclePercentage(int ccp, double duty_cycle_percentage) {
+    double val = PR2 * duty_cycle_percentage / 100;
+    if (ccp == 1) {
+        CCPR1L = (unsigned char) val;
+        CCP1CONbits.DC1B = (unsigned) (4 * (val - CCPR1L));
+    } else {
+        CCPR2L = (unsigned char) val;
+        CCP2CONbits.DC2B = (unsigned) (4 * (val - CCPR2L));
+    }
 }
 
 void startPWM() {

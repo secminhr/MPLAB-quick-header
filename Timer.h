@@ -134,20 +134,21 @@ void stopTimer3() {
 }
 
 typedef enum {
-    POST1, POST4, POST16
-} Postscaler;
+    T2PRE1, T2PRE4, T2PRE16
+} T2Prescaler;
 
-int postscaler_to_num[3] = { 1, 4, 16 };
+int t2_prescaler_to_num[3] = { 1, 4, 16 };
 
-char t2pre = 1;
-Postscaler t2post = POST1;
+T2Prescaler t2pre = PRE1;
+char t2post = 1;
 
-void configTimer2(char prescaler, Postscaler post, char use_interrupt, INT_PRIORITY priority) {
+void configTimer2(T2Prescaler prescaler, char post, char use_interrupt, INT_PRIORITY priority) {
     T2CON = 0;
-    T2CONbits.T2OUTPS = prescaler - 1;
+    T2CONbits.T2CKPS = prescaler;
     t2pre = prescaler;
-    T2CONbits.T2CKPS = post;
+    T2CONbits.T2OUTPS = post - 1;
     t2post = post;
+    
     
     PIR1bits.TMR2IF = 0;
     PIE1bits.TMR2IE = use_interrupt;
@@ -156,7 +157,7 @@ void configTimer2(char prescaler, Postscaler post, char use_interrupt, INT_PRIOR
 }
 
 int setTimeout2(unsigned long long us) {
-    unsigned long long counter = us * 2 / Tcycle_halfus() / t2pre / postscaler_to_num[t2post]; 
+    unsigned long long counter = us * 2 / Tcycle_halfus() / t2_prescaler_to_num[t2pre] / t2post; 
     if (counter <= 0x100) {
         PR2 = counter - 1;
         TMR2 = 0;
