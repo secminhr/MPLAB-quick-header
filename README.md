@@ -24,6 +24,7 @@ Note: `setIOMode` must be used before Analog input setting (ADCON1). `setIOMode`
 - [ ] internal interrupt INT0~2
 Need test
 - [ ] ADC
+Need test
 - [ ] Timer
 Need test
 - [ ] CCP
