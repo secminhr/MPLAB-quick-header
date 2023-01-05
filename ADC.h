@@ -39,9 +39,11 @@ char TacqSelectFactor[8] = {
 #define VREF 1
 
 char adc_use_interrupt = 0;
+char adc_mode = 0;
 
 void configADC(char mode, char VPlusSource, char VMinusSource, char use_interrupt, INT_PRIORITY priority) {
     ADCON2bits.ADFM = mode;
+    adc_mode = mode;
     ADCON1bits.VCFG0 = VPlusSource;
     ADCON1bits.VCFG1 = VMinusSource;
     PIR1bits.ADIF = 0;
@@ -74,7 +76,11 @@ void startConvertAN(char channel, unsigned short *res) {
     ADCON0bits.GO = 1;
     if (!adc_use_interrupt) {
         while (ADCON0bits.NOT_DONE) ;
-        *res = ADRES;
+        if (adc_mode == ADC8BIT) {
+            *res = ADRESH;
+        } else {
+            *res = ADRES;
+        }
     }
 }
 
