@@ -28,6 +28,14 @@ unsigned int Tcycle_halfus() {
     return Tcycle[fosc];
 }
 
+unsigned long long osc_number[8] = {
+    31000, 125000, 250000, 500000, 1000000, 2000000, 4000000, 8000000
+};
+
+unsigned long long Fosc_number() {
+    return osc_number[fosc];
+}
+
 void setOSCFreq(Freq f) {
     fosc = f;
     OSCCON = OSCValue[f];
