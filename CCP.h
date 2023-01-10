@@ -4,6 +4,7 @@
 #include <pic18f4520.h>
 #include "IO.h"
 #include "Interrupt.h"
+#include "Timer.h"
 
 #define TIMER1 0
 #define TIMER3 1
@@ -82,8 +83,11 @@ int configPWMCCP(int ccp, unsigned long long period_us, double duty_cycle_percen
         CCP1CONbits.DC1B = (unsigned) (4 * (val - CCPR1L));
         CCP1CONbits.CCP1M = 0xC;
     } else {
-        setIOMode(C, 3, OUT);
-        write(C, 3, LOW);
+//        setIOMode(C, 1, OUT);
+//        write(C, 1, LOW);
+        setIOMode(B, 3, OUT);
+        write(B, 3, LOW);
+        
         CCPR2L = (unsigned char) val;
         CCP2CONbits.DC2B = (unsigned) (4 * (val - CCPR2L));
         CCP2CONbits.CCP2M = 0xC;

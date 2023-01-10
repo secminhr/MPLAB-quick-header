@@ -82,8 +82,10 @@ void configTimer1(CommonPrescaler prescaler, char use_interrupt, INT_PRIORITY pr
 int setTimeout1(unsigned long long us) {
     unsigned long long counter = us * 2 / Tcycle_halfus() / prescaler_to_num[t1pre]; 
     if (counter <= 0x10000) {
-        TMR1H = (0x10000 - counter) >> 8;
-        TMR1L = 0x10000 - counter;
+        unsigned long long value = 0x10000 - counter;
+        unsigned long long shifted = value >> 8;
+        TMR1H = shifted;
+        TMR1L = value;
         return 1;
     } else {
         TMR1H = 0;
@@ -98,6 +100,11 @@ void startTimer1() {
 
 void stopTimer1() {
     T1CONbits.TMR1ON = 0;
+}
+
+void clearTimer1() {
+    PIR1bits.TMR1IF = 0;
+    TMR1 = 0;
 }
 
 CommonPrescaler t3pre = PRE1;
@@ -175,6 +182,11 @@ void startTimer2() {
 
 void stopTimer2() {
     T2CONbits.TMR2ON = 0;
+}
+
+void clearTimer2() {
+    PIR1bits.TMR2IF = 0;
+    TMR2 = 0;
 }
 
 #endif
